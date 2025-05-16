@@ -23,8 +23,7 @@ class Ping(Resource):
     @ns.marshal_with(mensaje_model)
     def get(self):
         """Endpoint para verificar que la API está funcionando"""
-        # TODO: pendiente de implementar
-        pass
+        return {"mensaje": "La API está funcionando correctamente"}, 200
 
 # Recursos para Usuarios
 @ns.route("/usuarios")
@@ -34,8 +33,7 @@ class UsuarioListAPI(Resource):
     @ns.marshal_list_with(usuario_model)
     def get(self):
         """Obtiene todos los usuarios registrados"""
-        # TODO: pendiente de implementar
-        pass
+        return Usuario.query.all(), 200
     
     @ns.doc("Crear un nuevo usuario")
     @ns.expect(usuario_base)
@@ -46,7 +44,6 @@ class UsuarioListAPI(Resource):
         """Crea un nuevo usuario"""
         data = request.json
         
-        # Verificar si el correo ya existe
         if Usuario.query.filter_by(correo=data["correo"]).first():
             ns.abort(400, "El correo electrónico ya está registrado")
         
@@ -71,8 +68,7 @@ class UsuarioAPI(Resource):
     @ns.marshal_with(usuario_model)
     def get(self, id):
         """Obtiene un usuario por su ID"""
-        # TODO: pendiente de implementar
-        pass
+        return Usuario.query.get_or_404(id), 200
     
     @ns.doc("Actualizar un usuario")
     @ns.expect(usuario_base)
@@ -82,7 +78,6 @@ class UsuarioAPI(Resource):
         usuario = Usuario.query.get_or_404(id)
         data = request.json
         
-        # Verificar si se intenta cambiar el correo a uno ya existente
         if "correo" in data and data["correo"] != usuario.correo:
             if Usuario.query.filter_by(correo=data["correo"]).first():
                 ns.abort(400, "El correo electrónico ya está registrado")
@@ -118,8 +113,7 @@ class CancionListAPI(Resource):
     @ns.marshal_list_with(cancion_model)
     def get(self):
         """Obtiene todas las canciones registradas"""
-        # TODO: pendiente de implementar
-        pass
+        return Cancion.query.all(), 200
     
     @ns.doc("Crear una nueva canción")
     @ns.expect(cancion_base)
@@ -154,8 +148,7 @@ class CancionAPI(Resource):
     @ns.marshal_with(cancion_model)
     def get(self, id):
         """Obtiene una canción por su ID"""
-        # TODO: pendiente de implementar
-        pass
+        return Cancion.query.get_or_404(id), 200
     
     @ns.doc("Actualizar una canción")
     @ns.expect(cancion_base)
@@ -215,7 +208,7 @@ class CancionBusquedaAPI(Resource):
         if genero:
             query = query.filter(Cancion.genero == genero)
             
-        return query.all()
+        return query.all(), 200
 
 # Recursos para Favoritos
 @ns.route("/favoritos")
@@ -225,8 +218,7 @@ class FavoritoListAPI(Resource):
     @ns.marshal_list_with(favorito_model)
     def get(self):
         """Obtiene todos los registros de favoritos"""
-        # TODO: pendiente de implementar
-        pass
+        return Favorito.query.all(), 200
     
     @ns.doc("Marcar una canción como favorita")
     @ns.expect(favorito_input)
@@ -238,7 +230,6 @@ class FavoritoListAPI(Resource):
         """Marca una canción como favorita para un usuario"""
         data = request.json
         
-        # Verificar si existen el usuario y la canción
         usuario = Usuario.query.get(data["id_usuario"])
         cancion = Cancion.query.get(data["id_cancion"])
         
@@ -247,7 +238,6 @@ class FavoritoListAPI(Resource):
         if not cancion:
             ns.abort(404, "Canción no encontrada")
         
-        # Verificar si ya existe el favorito
         favorito_existente = Favorito.query.filter_by(
             id_usuario=data["id_usuario"],
             id_cancion=data["id_cancion"]
@@ -277,8 +267,7 @@ class FavoritoAPI(Resource):
     @ns.marshal_with(favorito_model)
     def get(self, id):
         """Obtiene un registro de favorito por su ID"""
-        favorito = Favorito.query.get_or_404(id)
-        return favorito
+        return Favorito.query.get_or_404(id), 200
     
     @ns.doc("Eliminar un favorito")
     @ns.response(204, "Favorito eliminado con éxito")
@@ -303,10 +292,7 @@ class UsuarioFavoritosAPI(Resource):
         """Obtiene todas las canciones favoritas de un usuario"""
         usuario = Usuario.query.get_or_404(id)
         
-        # Obtener los favoritos del usuario
         favoritos = Favorito.query.filter_by(id_usuario=id).all()
-        
-        # Extraer las canciones de los favoritos
         canciones_favoritas = [
             {
                 "id": favorito.cancion.id,
@@ -322,7 +308,7 @@ class UsuarioFavoritosAPI(Resource):
                 "nombre": usuario.nombre
             },
             "canciones_favoritas": canciones_favoritas
-        }
+        }, 200
 
 @ns.route("/usuarios/<int:id_usuario>/favoritos/<int:id_cancion>")
 @ns.param("id_usuario", "Identificador único del usuario")
@@ -334,7 +320,6 @@ class UsuarioCancionFavoritoAPI(Resource):
     @ns.response(404, "Usuario o canción no encontrada")
     def post(self, id_usuario, id_cancion):
         """Marca una canción como favorita para un usuario"""
-        # Verificar si existen el usuario y la canción
         usuario = Usuario.query.get(id_usuario)
         cancion = Cancion.query.get(id_cancion)
         
@@ -343,7 +328,6 @@ class UsuarioCancionFavoritoAPI(Resource):
         if not cancion:
             ns.abort(404, "Canción no encontrada")
         
-        # Verificar si ya existe el favorito
         favorito = Favorito.query.filter_by(
             id_usuario=id_usuario,
             id_cancion=id_cancion
@@ -382,4 +366,10 @@ class UsuarioCancionFavoritoAPI(Resource):
         except Exception as e:
             db.session.rollback()
             ns.abort(400, f"Error al eliminar favorito: {str(e)}")
-
+@ns.route("/")
+class Home(Resource):
+    @ns.doc("Página principal de la API")
+    @ns.marshal_with(mensaje_model)
+    def get(self):
+        """Mensaje de bienvenida en la raíz de la API"""
+        return {"mensaje": "Bienvenido a la API de Música. Visita /docs para la documentación."}, 200

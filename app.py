@@ -5,15 +5,18 @@ import os
 from musica_api import create_app
 from dotenv import load_dotenv
 
-# TODO: Cargar variables de entorno desde archivo .env si existe
+# Cargar variables de entorno desde archivo .env si existe
+load_dotenv()
 
-# TODO: crear la aplicación
+# Crear la aplicación
+app = create_app()
 
 if __name__ == "__main__":
-    # TODO: Obtener puerto del ambiente o usar 5000 por defecto
+    # Obtener puerto del ambiente o usar 5000 por defecto
+    port = int(os.getenv("PORT", 5000))
     
-    # TODO: Determinar si se debe usar modo debug
+    # Determinar si se debe usar modo debug
+    debug = os.getenv("FLASK_DEBUG", "False").lower() == "true"
     
-    # TODO: Ejecutar aplicación
-
-    pass
+    # Ejecutar aplicación
+    app.run(host="0.0.0.0", port=port, debug=debug)
