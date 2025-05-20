@@ -26,14 +26,19 @@ class Ping(Resource):
         return {"mensaje": "La API está funcionando correctamente"}, 200
 
 # Recursos para Usuarios
-@ns.route("/usuarios")
-class UsuarioListAPI(Resource):
-    @ns.doc("Listar todos los usuarios")
-    @ns.response(200, "Lista de usuarios obtenida con éxito")
-    @ns.marshal_list_with(usuario_model)
-    def get(self):
-        """Obtiene todos los usuarios registrados"""
-        return Usuario.query.all(), 200
+@ns.doc("Listar todos los usuarios con paginación")
+@ns.param("page", "Número de página (por defecto 1)")
+@ns.param("per_page", "Cantidad por página (por defecto 4)")
+@ns.response(200, "Lista de usuarios obtenida con éxito")
+@ns.marshal_list_with(usuario_model)
+def get(self):
+    """Obtiene todos los usuarios registrados (paginados)"""
+    page = int(request.args.get("page", 1))
+    per_page = int(request.args.get("per_page", 4))
+    
+    usuarios = Usuario.query.paginate(page=page, per_page=per_page, error_out=False)
+    return usuarios.items, 200
+
     
     @ns.doc("Crear un nuevo usuario")
     @ns.expect(usuario_base)
@@ -108,12 +113,19 @@ class UsuarioAPI(Resource):
 # Recursos para Canciones
 @ns.route("/canciones")
 class CancionListAPI(Resource):
-    @ns.doc("Listar todas las canciones")
+    @ns.doc("Listar todas las canciones con paginación")
+    @ns.param("page", "Número de página (por defecto 1)")
+    @ns.param("per_page", "Cantidad por página (por defecto 4)")
     @ns.response(200, "Lista de canciones obtenida con éxito")
     @ns.marshal_list_with(cancion_model)
     def get(self):
-        """Obtiene todas las canciones registradas"""
-        return Cancion.query.all(), 200
+        """Obtiene todas las canciones registradas (paginadas)"""
+        page = int(request.args.get("page", 1))
+        per_page = int(request.args.get("per_page", 4))
+        
+        canciones = Cancion.query.paginate(page=page, per_page=per_page, error_out=False)
+        return canciones.items, 200
+
     
     @ns.doc("Crear una nueva canción")
     @ns.expect(cancion_base)
@@ -211,14 +223,19 @@ class CancionBusquedaAPI(Resource):
         return query.all(), 200
 
 # Recursos para Favoritos
-@ns.route("/favoritos")
-class FavoritoListAPI(Resource):
-    @ns.doc("Listar todos los favoritos")
-    @ns.response(200, "Lista de favoritos obtenida con éxito")
-    @ns.marshal_list_with(favorito_model)
-    def get(self):
-        """Obtiene todos los registros de favoritos"""
-        return Favorito.query.all(), 200
+@ns.doc("Listar todos los favoritos con paginación")
+@ns.param("page", "Número de página (por defecto 1)")
+@ns.param("per_page", "Cantidad por página (por defecto 4)")
+@ns.response(200, "Lista de favoritos obtenida con éxito")
+@ns.marshal_list_with(favorito_model)
+def get(self):
+    """Obtiene todos los registros de favoritos (paginados)"""
+    page = int(request.args.get("page", 1))
+    per_page = int(request.args.get("per_page", 4))
+    
+    favoritos = Favorito.query.paginate(page=page, per_page=per_page, error_out=False)
+    return favoritos.items, 200
+
     
     @ns.doc("Marcar una canción como favorita")
     @ns.expect(favorito_input)
