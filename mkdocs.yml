@@ -1,0 +1,18 @@
+site_name: API Musical
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+
+nav:
+  - Documentación:
+      - Recursos: resources.md
+      - Modelos: models.md
+      - Extensiones: extensions.md
+      - Configuración: config.md
+      - Modelos de API: api_models.md
+      - Utilidades: utils.md
+      - Aplicación Principal: app.md
