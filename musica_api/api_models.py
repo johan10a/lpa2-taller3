@@ -1,17 +1,22 @@
 """
 Módulo de modelos de API para la serialización/deserialización de datos.
-Define los esquemas utilizados por Flask-RESTX para la documentación y validación.
+
+Define los esquemas utilizados por Flask-RESTX para la documentación y validación
+de los recursos de la API: Usuarios, Canciones y Favoritos.
 """
 
 from flask_restx import fields
 from .extensions import api
 
-# Modelo para respuestas simples
 mensaje_model = api.model(
     "Mensaje", {"mensaje": fields.String(description="Mensaje informativo")}
 )
+"""Modelo para respuestas simples con un mensaje informativo.
 
-# Modelos para Usuario
+Campos:
+- mensaje (str): Mensaje informativo.
+"""
+
 usuario_base = api.model(
     "UsuarioBase",
     {
@@ -21,6 +26,12 @@ usuario_base = api.model(
         ),
     },
 )
+"""Modelo base para Usuario.
+
+Campos obligatorios:
+- nombre (str): Nombre del usuario.
+- correo (str): Correo electrónico del usuario.
+"""
 
 usuario_model = api.inherit(
     "Usuario",
@@ -30,8 +41,13 @@ usuario_model = api.inherit(
         "fecha_registro": fields.DateTime(description="Fecha de registro del usuario"),
     },
 )
+"""Modelo completo de Usuario, heredando de UsuarioBase.
 
-# Modelos para Canción
+Campos adicionales:
+- id (int): Identificador único del usuario.
+- fecha_registro (datetime): Fecha de registro.
+"""
+
 cancion_base = api.model(
     "CancionBase",
     {
@@ -45,6 +61,18 @@ cancion_base = api.model(
         "genero": fields.String(description="Género musical"),
     },
 )
+"""Modelo base para Canción.
+
+Campos obligatorios:
+- titulo (str): Título de la canción.
+- artista (str): Artista o intérprete.
+
+Campos opcionales:
+- album (str): Álbum al que pertenece.
+- duracion (int): Duración en segundos.
+- año (int): Año de lanzamiento.
+- genero (str): Género musical.
+"""
 
 cancion_model = api.inherit(
     "Cancion",
@@ -54,8 +82,13 @@ cancion_model = api.inherit(
         "fecha_creacion": fields.DateTime(description="Fecha de creación del registro"),
     },
 )
+"""Modelo completo de Canción, heredando de CancionBase.
 
-# Modelos para Favorito
+Campos adicionales:
+- id (int): Identificador único.
+- fecha_creacion (datetime): Fecha de creación del registro.
+"""
+
 favorito_input = api.model(
     "FavoritoInput",
     {
@@ -63,8 +96,13 @@ favorito_input = api.model(
         "id_cancion": fields.Integer(required=True, description="ID de la canción"),
     },
 )
+"""Modelo para entrada de Favorito.
 
-# Modelo para mostrar detalles completos de un favorito
+Campos obligatorios:
+- id_usuario (int): ID del usuario.
+- id_cancion (int): ID de la canción.
+"""
+
 cancion_simple = api.model(
     "CancionSimple",
     {
@@ -73,6 +111,7 @@ cancion_simple = api.model(
         "artista": fields.String(description="Artista de la canción"),
     },
 )
+"""Modelo simple para representar una Canción con campos básicos."""
 
 usuario_simple = api.model(
     "UsuarioSimple",
@@ -81,6 +120,7 @@ usuario_simple = api.model(
         "nombre": fields.String(description="Nombre del usuario"),
     },
 )
+"""Modelo simple para representar un Usuario con campos básicos."""
 
 favorito_model = api.model(
     "Favorito",
@@ -95,8 +135,13 @@ favorito_model = api.model(
         "cancion": fields.Nested(cancion_simple, description="Datos de la canción"),
     },
 )
+"""Modelo completo para representar un Favorito.
 
-# Modelo para mostrar canciones favoritas de un usuario
+Incluye:
+- información básica del favorito,
+- datos anidados del usuario y la canción relacionados.
+"""
+
 favoritos_usuario_model = api.model(
     "FavoritosUsuario",
     {
@@ -104,3 +149,9 @@ favoritos_usuario_model = api.model(
         "canciones_favoritas": fields.List(fields.Nested(cancion_simple)),
     },
 )
+"""Modelo para mostrar canciones favoritas de un usuario.
+
+Campos:
+- usuario (UsuarioSimple): Datos básicos del usuario.
+- canciones_favoritas (list): Lista de canciones favoritas (CancionSimple).
+"""

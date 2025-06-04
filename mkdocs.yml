@@ -1,6 +1,9 @@
 site_name: API Musical
+site_url: https://johan10a.github.io/lpa2-taller3/
+use_directory_urls: true
+
 theme:
-  name: material
+  name: dracula  # Asegúrate de que el tema esté instalado correctamente
 
 plugins:
   - search
@@ -8,6 +11,7 @@ plugins:
       default_handler: python
 
 nav:
+  - Inicio: index.md
   - Documentación:
       - Recursos: resources.md
       - Modelos: models.md
