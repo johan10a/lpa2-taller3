@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
+         <loc>https://johan10a.github.io/lpa2-taller3/</loc>
+         <lastmod>2025-06-04</lastmod>
+    </url>
+    <url>
          <loc>https://johan10a.github.io/lpa2-taller3/api_models/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
     <url>
          <loc>https://johan10a.github.io/lpa2-taller3/app/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
     <url>
          <loc>https://johan10a.github.io/lpa2-taller3/config/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
     <url>
          <loc>https://johan10a.github.io/lpa2-taller3/extensions/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
     <url>
          <loc>https://johan10a.github.io/lpa2-taller3/models/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
     <url>
          <loc>https://johan10a.github.io/lpa2-taller3/resources/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
     <url>
          <loc>https://johan10a.github.io/lpa2-taller3/utils/</loc>
-         <lastmod>2025-06-02</lastmod>
+         <lastmod>2025-06-04</lastmod>
     </url>
 </urlset>
