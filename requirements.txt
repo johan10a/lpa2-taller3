@@ -6,3 +6,4 @@ python-dotenv
 mkdocs
 mkdocs-material
 mkdocstrings[python]
+pytest
