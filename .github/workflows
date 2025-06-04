@@ -3,7 +3,7 @@ name: CI para API Musical 🎵
 on:
   push:
     tags:
-      - 'v*'  # Solo ejecuta si el push tiene una etiqueta que empieza por v
+      - 'v*' 
     branches:
       - main
   pull_request:
