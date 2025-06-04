@@ -1,0 +1,44 @@
+name: CI para API Musical 🎵
+
+on:
+  push:
+    tags:
+      - 'v*'  # Solo ejecuta si el push tiene una etiqueta que empieza por v
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🔄 Clonar repositorio
+      uses: actions/checkout@v3
+
+    - name: 🐍 Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 📦 Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest mkdocs mkdocs-material mkdocstrings[python] ruff
+
+    - name: ✅ Validar código con Ruff
+      run: ruff check .
+
+    - name: 🎯 Formatear con Ruff (solo verificación)
+      run: ruff format --check .
+
+    - name: 🧪 Ejecutar pruebas con Pytest
+      run: pytest
+
+    - name: 📚 Construir documentación MkDocs
+      run: mkdocs build
+
+    - name: 🚀 Publicar documentación en GitHub Pages
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: mkdocs gh-deploy --force
